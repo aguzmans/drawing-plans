@@ -1,0 +1,6 @@
+ezdxf>=1.4
+shapely>=2.0
+networkx>=3.0
+matplotlib>=3.7
+# optional, for ingestion stages described in docs/:
+# PyMuPDF, pdfplumber, opencv-python, pytesseract, gdal, pyproj, anthropic
