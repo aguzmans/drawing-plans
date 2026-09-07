@@ -94,8 +94,8 @@ def render(path, only=None):
         be = svg.SVGBackend()
         Frontend(RenderContext(doc), be, config=_CFG).draw_layout(msp, finalize=True)
         s = be.get_string(_PAGE)
-        vb = (_VB_RE.search(s) or [None, "0 0 1000 1000"])[1] if _VB_RE.search(s) else "0 0 1000 1000"
-        vb = _VB_RE.search(s).group(1)
+        m = _VB_RE.search(s)
+        vb = m.group(1) if m else "0 0 1000 1000"
         s = _XMLDECL_RE.sub("", s)
         # neutral pen -> currentColor so white/black adapt to the page background
         s = s.replace("#ffffff", "currentColor").replace("#000000", "currentColor")

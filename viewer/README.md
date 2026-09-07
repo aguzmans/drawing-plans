@@ -4,28 +4,30 @@ A tiny local web viewer for the project's DXF plans. Faithful `ezdxf` rendering,
 pan/zoom, per-layer toggles, dark/light background, and a live SVY21 coordinate
 read-out. No external JS/CSS/font dependencies; only Python + `ezdxf`.
 
-## Run with Docker (recommended)
+## Run (Docker Compose — canonical)
 ```bash
 cd viewer
-docker build -t cad-viewer:local .
-docker run -d --name cad-viewer -p 8000:8000 cad-viewer:local
-# open http://localhost:8000    (stop with: docker rm -f cad-viewer)
+docker compose up -d viewer      # build + run at http://localhost:8000
+docker compose down              # stop
 ```
-To view your own DXFs live without rebuilding, mount a folder over the baked-in
-`plans/` (drop files in, refresh the browser):
-```bash
-docker run -d --name cad-viewer -p 8000:8000 \
-  -v "$(pwd)/plans:/app/plans" cad-viewer:local
-```
-Change the host port with `-p 9000:8000`.
+`plans/` is mounted into the container, so drop `.dxf` files in and refresh the
+browser — no rebuild needed. Change the host port by editing `ports:` in
+`docker-compose.yml`.
 
-## Run without Docker
+## Test (Playwright E2E)
 ```bash
-pip install ezdxf pillow
-python server.py                       # serves http://localhost:8000
+docker compose run --rm e2e      # runs the browser tests against the viewer
+```
+The `e2e` service builds `tests/`, waits for the viewer to be healthy, and runs the
+Playwright suite in `tests/e2e/`. It must be green before any UI change is "done"
+(see ../CLAUDE.md).
+
+## Run without Docker (dev only)
+```bash
+pip install -r requirements.txt        # pinned: ezdxf, pillow
+python server.py                       # http://localhost:8000
 python server.py --port 9000 --plans /path/to/dxf/folder
 ```
-Then open the URL in a browser.
 
 ## Use
 - **plan** dropdown — pick any `.dxf` in the plans folder (drop new files in and

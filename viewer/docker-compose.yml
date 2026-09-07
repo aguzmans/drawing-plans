@@ -1,0 +1,36 @@
+# CAD viewer + its Playwright E2E suite.
+#
+#   docker compose up -d viewer            # run the viewer at http://localhost:8000
+#   docker compose run --rm e2e            # run the end-to-end tests against it
+#   docker compose down                    # stop everything
+#
+# The e2e service reaches the viewer by service name over the compose network.
+
+services:
+  viewer:
+    build: .
+    image: cad-viewer:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      # live-edit your DXFs without rebuilding
+      - ./plans:/app/plans:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/api/files',timeout=5).status==200 else 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  e2e:
+    build: ./tests
+    image: cad-viewer-e2e:latest
+    profiles: ["test"]
+    depends_on:
+      viewer:
+        condition: service_healthy
+    environment:
+      VIEWER_URL: "http://viewer:8000"
+    # -q quiet; fail the run if any test fails (default). Add args after --.
+    command: ["pytest", "-q"]

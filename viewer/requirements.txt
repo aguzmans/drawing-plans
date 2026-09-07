@@ -1,0 +1,5 @@
+# Runtime dependencies for the CAD viewer service.
+# Pinned to exact latest-stable releases (verified on PyPI 2026-09-06).
+# Bump deliberately; see CLAUDE.md.
+ezdxf==1.4.4
+pillow==12.3.0

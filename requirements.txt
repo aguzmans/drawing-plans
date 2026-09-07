@@ -1,6 +1,11 @@
-ezdxf>=1.4
-shapely>=2.0
-networkx>=3.0
-matplotlib>=3.7
-# optional, for ingestion stages described in docs/:
-# PyMuPDF, pdfplumber, opencv-python, pytesseract, gdal, pyproj, anthropic
+# Prototype (route optimisation) dependencies.
+# Pinned to exact latest-stable releases (verified on PyPI 2026-09-06).
+# The viewer has its own pinned deps in viewer/requirements.txt.
+ezdxf==1.4.4
+shapely==2.1.2
+networkx==3.6.1
+matplotlib==3.11.1
+numpy==2.5.2
+
+# Ingestion stages described in docs/ (not yet wired in) will add, pinned when used:
+#   pymupdf==1.28.2, pdfplumber, opencv-python, pyproj, anthropic
